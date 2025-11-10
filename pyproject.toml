@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grompt"
+version = "0.1.0"
+description = "Git for Prompts - Manage LLM prompts with version control"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Grompt Contributors"}
+]
+keywords = ["llm", "prompts", "version-control", "ai", "gpt"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "pyyaml>=6.0",
+    "jinja2>=3.1.0",
+    "tiktoken>=0.5.0",
+    "click>=8.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+
+[project.scripts]
+grompt = "grompt.application.cli.main:cli"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/grompt"
+Documentation = "https://github.com/yourusername/grompt#readme"
+Repository = "https://github.com/yourusername/grompt"
+Issues = "https://github.com/yourusername/grompt/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["grompt*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
