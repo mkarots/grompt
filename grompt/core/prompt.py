@@ -86,3 +86,16 @@ class Prompt:
             variables=variables,
             metadata=metadata,
         )
+
+    def render(self, **kwargs) -> str:
+        """
+        Render the prompt template with the provided variables.
+        
+        Args:
+            **kwargs: Variables to pass to the template
+            
+        Returns:
+            The rendered template string
+        """
+        from grompt.core.template import TemplateRenderer
+        return TemplateRenderer.render(self.template, **kwargs)

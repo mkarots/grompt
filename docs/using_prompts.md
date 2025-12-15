@@ -21,22 +21,18 @@ grompt test advanced --var items='[{"name":"x","value":1}]'
 ## Python API
 
 ```python
-from grompt import TemplateRenderer
-from grompt.infrastructure.storage.yaml_loader import YAMLLoader
+import grompt
 
 # Load prompt
-loader = YAMLLoader()
-prompt = loader.load_prompt("code-review")
+prompt = grompt.load("code-review")
 
 # Simple rendering
-rendered = TemplateRenderer.render(
-    prompt.template,
+rendered = prompt.render(
     code="def add(a, b): return a + b"
 )
 
 # Multiple variables
-rendered = TemplateRenderer.render(
-    prompt.template,
+rendered = prompt.render(
     code="def add(a, b): return a + b",
     language="Python",
     focus_areas=["quality", "type hints"]
@@ -52,15 +48,12 @@ if prompt.system:
 ## Using with LLM APIs
 
 ```python
-from grompt.infrastructure.storage.yaml_loader import YAMLLoader
-from grompt import TemplateRenderer
+import grompt
 import openai
 
 # Load and render
-loader = YAMLLoader()
-prompt = loader.load_prompt("code-review")
-message = TemplateRenderer.render(
-    prompt.template,
+prompt = grompt.load("code-review")
+message = prompt.render(
     code=my_code,
     language="Python"
 )

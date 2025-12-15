@@ -73,16 +73,13 @@ grompt test code-review --var code="def hello(): pass"
 Load and use the prompt in your application.
 
 ```python
-from grompt import TemplateRenderer
-from grompt.infrastructure.storage.yaml_loader import YAMLLoader
+import grompt
 
 # Load the prompt
-loader = YAMLLoader()
-prompt = loader.load_prompt("code-review")
+prompt = grompt.load("code-review")
 
 # Render with variables
-rendered = TemplateRenderer.render(
-    prompt.template, 
+rendered = prompt.render(
     code="def add(a,b): return a+b"
 )
 print(rendered)
