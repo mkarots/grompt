@@ -3,6 +3,7 @@ Main CLI entry point for Grompt.
 """
 
 import click
+from grompt.application.cli.commands import init, add, commit
 
 
 @click.group()
@@ -14,11 +15,6 @@ def cli():
     Manage LLM prompts with version control.
     """
     pass
-
-
-# Import commands
-from grompt.application.cli.commands import init, add, commit
-
 
 # Register commands
 cli.add_command(init.init)
