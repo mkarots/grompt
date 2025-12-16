@@ -4,7 +4,7 @@ YAML file loader for prompts.
 
 import yaml
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Any, Optional
 from grompt.core.prompt import Prompt
 
 
@@ -31,7 +31,7 @@ class YAMLLoader:
         # Default to prompts directory
         return self.prompts_dir / f"{prompt_id}.yaml"
 
-    def load(self, prompt_id: str) -> Dict:
+    def load(self, prompt_id: str) -> dict[str, Any]:
         """
         Load a prompt YAML file.
         
@@ -56,7 +56,7 @@ class YAMLLoader:
         if not data:
             raise ValueError(f"Empty or invalid YAML file: {path}")
         
-        return data
+        return dict(data)
     
     def save(self, prompt: Prompt, prompt_id: Optional[str] = None) -> Path:
         """

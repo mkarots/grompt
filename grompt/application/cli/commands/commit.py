@@ -5,11 +5,12 @@ grompt commit command - Version and hash a prompt.
 import click
 import yaml
 from pathlib import Path
+from typing import Any, Optional
 from grompt.infrastructure.storage.yaml_loader import YAMLLoader
 from grompt.infrastructure.storage.hasher import PromptHasher
 
 
-def load_config() -> dict:
+def load_config() -> dict[str, Any]:
     """Load .grompt config file."""
     config_file = Path.cwd() / '.grompt'
     if not config_file.exists():
@@ -18,13 +19,14 @@ def load_config() -> dict:
         )
     
     with open(config_file, 'r') as f:
-        return yaml.safe_load(f)
+        result = yaml.safe_load(f)
+        return result if result else {}
 
 
 @click.command()
 @click.argument('name')
 @click.argument('message', required=False)
-def commit(name: str, message: str):
+def commit(name: str, message: Optional[str]) -> None:
     """
     Commit changes to a prompt (increment version and generate hash).
     

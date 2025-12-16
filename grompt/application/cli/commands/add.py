@@ -5,11 +5,12 @@ grompt add command - Create a new prompt file.
 import click
 import yaml
 from pathlib import Path
+from typing import Any, Optional
 from grompt.core.prompt import Prompt
 from grompt.infrastructure.storage.yaml_loader import YAMLLoader
 
 
-def load_config() -> dict:
+def load_config() -> dict[str, Any]:
     """Load .grompt config file."""
     config_file = Path.cwd() / '.grompt'
     if not config_file.exists():
@@ -18,7 +19,8 @@ def load_config() -> dict:
         )
     
     with open(config_file, 'r') as f:
-        return yaml.safe_load(f)
+        result = yaml.safe_load(f)
+        return result if result else {}
 
 
 @click.command()
@@ -28,7 +30,14 @@ def load_config() -> dict:
 @click.option('--description', help='Prompt description')
 @click.option('--system', help='System message')
 @click.option('--dir', 'directory', help='Subdirectory to create prompt in')
-def add(name: str, model: str, template: str, description: str, system: str, directory: str):
+def add(
+    name: str,
+    model: Optional[str],
+    template: Optional[str],
+    description: Optional[str],
+    system: Optional[str],
+    directory: Optional[str]
+) -> None:
     """
     Create a new prompt file.
     
