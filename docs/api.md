@@ -3,12 +3,16 @@
 ## Loading Prompts
 
 ```python
-from grompt.infrastructure.storage.yaml_loader import YAMLLoader
+import grompt
 
-loader = YAMLLoader()
+# Load by ID (defaults to reading from 'prompts' directory)
+prompt = grompt.load("code-review")
 
-# Load by ID
-prompt = loader.load_prompt("code-review")
+# Load by absolute file path
+prompt = grompt.load("/path/to/my-prompt.yaml")
+
+# Load from a specific directory or use a specific loader
+prompt = grompt.load("code-review", prompts_dir="my_prompts", loader="yaml")
 
 # Access properties
 print(prompt.id)          # "code-review"
@@ -18,26 +22,33 @@ print(prompt.template)    # Template string
 print(prompt.variables)   # Variable definitions
 ```
 
-## Rendering Templates
+## Rendering Prompts
 
 ```python
-from grompt import TemplateRenderer
-
-# Simple rendering
-rendered = TemplateRenderer.render(
-    "Hello {{ name }}!",
-    name="World"
-)
-
-# With prompt
-rendered = TemplateRenderer.render(
-    prompt.template,
+# Render directly from the prompt object
+rendered = prompt.render(
     code="def add(a, b): return a + b",
     language="Python"
 )
 
-# Validate template
-is_valid = TemplateRenderer.validate(prompt.template)
+print(rendered)
+```
+
+## Advanced: Using Lower-Level Classes
+
+If you need more control, you can still access the underlying classes:
+
+```python
+from grompt.infrastructure.storage.yaml_loader import YAMLLoader
+from grompt import TemplateRenderer
+
+loader = YAMLLoader()
+prompt = loader.load_prompt("code-review")
+
+rendered = TemplateRenderer.render(
+    prompt.template,
+    code="def add(a, b): return a + b"
+)
 ```
 
 ## Working with Variables
@@ -53,11 +64,4 @@ required_vars = [
 def get_var_value(var_name, user_input):
     spec = prompt.variables.get(var_name, {})
     return user_input.get(var_name, spec.get('default'))
-
-# Validate variable types
-def validate_vars(user_input):
-    for name, spec in prompt.variables.items():
-        if spec.get('required') and name not in user_input:
-            raise ValueError(f"Missing required variable: {name}")
 ```
-

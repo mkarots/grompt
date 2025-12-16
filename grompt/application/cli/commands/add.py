@@ -5,11 +5,12 @@ grompt add command - Create a new prompt file.
 import click
 import yaml
 from pathlib import Path
+from typing import Any, Optional
 from grompt.core.prompt import Prompt
 from grompt.infrastructure.storage.yaml_loader import YAMLLoader
 
 
-def load_config() -> dict:
+def load_config() -> dict[str, Any]:
     """Load .grompt config file."""
     config_file = Path.cwd() / '.grompt'
     if not config_file.exists():
@@ -18,7 +19,8 @@ def load_config() -> dict:
         )
     
     with open(config_file, 'r') as f:
-        return yaml.safe_load(f)
+        result = yaml.safe_load(f)
+        return result if result else {}
 
 
 @click.command()
@@ -28,7 +30,14 @@ def load_config() -> dict:
 @click.option('--description', help='Prompt description')
 @click.option('--system', help='System message')
 @click.option('--dir', 'directory', help='Subdirectory to create prompt in')
-def add(name: str, model: str, template: str, description: str, system: str, directory: str):
+def add(
+    name: str,
+    model: Optional[str],
+    template: Optional[str],
+    description: Optional[str],
+    system: Optional[str],
+    directory: Optional[str]
+) -> None:
     """
     Create a new prompt file.
     
@@ -70,6 +79,11 @@ def add(name: str, model: str, template: str, description: str, system: str, dir
     # Use provided model or default from config
     prompt_model = model or config.get('default_model', 'gpt-4')
     
+    # Create parameters dict
+    parameters = {
+        "model": prompt_model
+    }
+    
     # Create prompt with provided options or defaults
     if template:
         # User provided template
@@ -85,8 +99,8 @@ def add(name: str, model: str, template: str, description: str, system: str, dir
     prompt = Prompt(
         id=prompt_id,
         version=1,
-        model=prompt_model,
         template=prompt_template,
+        parameters=parameters,
         system=system,
         description=description,
     )

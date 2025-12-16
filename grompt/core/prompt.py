@@ -3,7 +3,7 @@ Core Prompt entity - pure domain model.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 
 @dataclass
@@ -16,13 +16,13 @@ class Prompt:
     
     id: str
     version: int
-    model: str
     template: str
+    parameters: Dict[str, Any] = field(default_factory=dict)
     hash: Optional[str] = None
     system: Optional[str] = None
     description: Optional[str] = None
-    variables: Dict[str, any] = field(default_factory=dict)
-    metadata: Dict[str, any] = field(default_factory=dict)
+    variables: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
     
     def __post_init__(self) -> None:
         """Validate prompt data after initialization."""
@@ -30,18 +30,23 @@ class Prompt:
             raise ValueError("Prompt ID cannot be empty")
         if self.version < 1:
             raise ValueError("Prompt version must be >= 1")
-        if not self.model:
-            raise ValueError("Prompt model cannot be empty")
         if not self.template:
             raise ValueError("Prompt template cannot be empty")
+        if not isinstance(self.parameters, dict):
+            self.parameters = {}
     
-    def to_dict(self) -> Dict[str, any]:
+    @property
+    def model(self) -> Optional[str]:
+        """Backward compatibility helper to get model from parameters."""
+        return self.parameters.get("model")
+
+    def to_dict(self) -> Dict[str, Any]:
         """Convert prompt to dictionary for serialization."""
         data = {
             "id": self.id,
             "version": self.version,
-            "model": self.model,
             "template": self.template,
+            "parameters": self.parameters,
         }
         
         if self.hash:
@@ -59,30 +64,51 @@ class Prompt:
         return data
     
     @classmethod
-    def from_dict(cls, data: Dict[str, any]) -> "Prompt":
+    def from_dict(cls, data: Dict[str, Any]) -> "Prompt":
         """Create a Prompt from a dictionary."""
         # Extract known fields
-        id = data.get("id")
+        prompt_id = data.get("id", "")
         version = data.get("version", 1)
-        model = data.get("model", "gpt-4")
         template = data.get("template", "")
-        hash = data.get("hash")
+        
+        # Handle parameters / legacy model field
+        parameters = data.get("parameters", {})
+        if "model" in data and "model" not in parameters:
+            parameters["model"] = data["model"]
+            
+        prompt_hash = data.get("hash")
         system = data.get("system")
         description = data.get("description")
         variables = data.get("variables", {})
         
         # Everything else goes into metadata
-        metadata_keys = {"id", "version", "model", "template", "hash", "system", "description", "variables"}
+        metadata_keys = {
+            "id", "version", "model", "template", "hash", 
+            "system", "description", "variables", "parameters"
+        }
         metadata = {k: v for k, v in data.items() if k not in metadata_keys}
         
         return cls(
-            id=id,
+            id=prompt_id,
             version=version,
-            model=model,
             template=template,
-            hash=hash,
+            parameters=parameters,
+            hash=prompt_hash,
             system=system,
             description=description,
             variables=variables,
             metadata=metadata,
         )
+
+    def render(self, **kwargs: Any) -> str:
+        """
+        Render the prompt template with the provided variables.
+        
+        Args:
+            **kwargs: Variables to pass to the template
+            
+        Returns:
+            The rendered template string
+        """
+        from grompt.core.template import TemplateRenderer
+        return TemplateRenderer.render(self.template, **kwargs)

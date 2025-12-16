@@ -2,6 +2,7 @@
 Template rendering logic using Jinja2.
 """
 
+from typing import Any
 from jinja2 import Template, TemplateError
 
 
@@ -9,7 +10,7 @@ class TemplateRenderer:
     """Pure template rendering logic."""
     
     @staticmethod
-    def render(template: str, **kwargs) -> str:
+    def render(template: str, **kwargs: Any) -> str:
         """
         Render a Jinja2 template with variables.
         
