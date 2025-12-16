@@ -8,7 +8,7 @@ from grompt.application.cli.commands import init, add, commit
 
 @click.group()
 @click.version_option(version="0.1.0")
-def cli():
+def cli() -> None:
     """
     Grompt - Git for Prompts
     

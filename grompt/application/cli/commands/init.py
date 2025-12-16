@@ -18,7 +18,7 @@ from pathlib import Path
     default='gpt-4',
     help='Default model (default: gpt-4)'
 )
-def init(prompts_dir: str, model: str):
+def init(prompts_dir: str, model: str) -> None:
     """
     Initialize a grompt project in the current directory.
     

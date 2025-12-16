@@ -67,7 +67,7 @@ class Prompt:
     def from_dict(cls, data: Dict[str, Any]) -> "Prompt":
         """Create a Prompt from a dictionary."""
         # Extract known fields
-        id = data.get("id")
+        prompt_id = data.get("id", "")
         version = data.get("version", 1)
         template = data.get("template", "")
         
@@ -76,7 +76,7 @@ class Prompt:
         if "model" in data and "model" not in parameters:
             parameters["model"] = data["model"]
             
-        hash = data.get("hash")
+        prompt_hash = data.get("hash")
         system = data.get("system")
         description = data.get("description")
         variables = data.get("variables", {})
@@ -89,18 +89,18 @@ class Prompt:
         metadata = {k: v for k, v in data.items() if k not in metadata_keys}
         
         return cls(
-            id=id,
+            id=prompt_id,
             version=version,
             template=template,
             parameters=parameters,
-            hash=hash,
+            hash=prompt_hash,
             system=system,
             description=description,
             variables=variables,
             metadata=metadata,
         )
 
-    def render(self, **kwargs) -> str:
+    def render(self, **kwargs: Any) -> str:
         """
         Render the prompt template with the provided variables.
         
