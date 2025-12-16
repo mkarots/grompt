@@ -5,7 +5,7 @@ A simple system to organize, version, and manage LLM prompts separately from cod
 """
 
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 
 from grompt.core.prompt import Prompt
 from grompt.core.template import TemplateRenderer

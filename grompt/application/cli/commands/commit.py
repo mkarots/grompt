@@ -72,7 +72,7 @@ def commit(name: str, message: str):
         prompt.hash = new_hash
         
         # Save updated prompt
-        path = loader.save(prompt)
+        _ = loader.save(prompt)
         
         # Display results
         click.echo(click.style('✓', fg='green') + f' Committed {prompt_id}')

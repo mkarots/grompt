@@ -3,7 +3,6 @@ Main CLI entry point for Grompt.
 """
 
 import click
-from pathlib import Path
 
 
 @click.group()

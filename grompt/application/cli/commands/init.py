@@ -58,9 +58,9 @@ def init(prompts_dir: str, model: str):
         click.echo(click.style('Grompt project initialized!', fg='green', bold=True))
         click.echo()
         click.echo('Next steps:')
-        click.echo(f'  1. Create a prompt: grompt add my-prompt')
+        click.echo('  1. Create a prompt: grompt add my-prompt')
         click.echo(f'  2. Edit it: vim {prompts_dir}/my-prompt.yaml')
-        click.echo(f'  3. Commit changes: grompt commit my-prompt')
+        click.echo('  3. Commit changes: grompt commit my-prompt')
         
     except Exception as e:
         click.echo(click.style(f'Error: {e}', fg='red'))

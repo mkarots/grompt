@@ -1,11 +1,8 @@
 """
 Unit tests for the YAMLLoader.
 """
-
-import os
 import yaml
 import pytest
-from pathlib import Path
 from grompt.core.prompt import Prompt
 from grompt.infrastructure.storage.yaml_loader import YAMLLoader
 

@@ -2,7 +2,7 @@
 Execution core for running prompts.
 """
 
-from typing import Protocol, Dict, Any, Type
+from typing import Protocol, Dict, Any
 from grompt.core.prompt import Prompt
 
 
