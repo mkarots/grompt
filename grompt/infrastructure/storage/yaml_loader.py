@@ -20,12 +20,23 @@ class YAMLLoader:
         """
         self.prompts_dir = Path(prompts_dir)
     
+    def _resolve_path(self, prompt_id: str) -> Path:
+        """Resolve prompt ID to a file path."""
+        path = Path(prompt_id)
+        
+        # Check if it's a direct file path (absolute or relative)
+        if path.suffix.lower() in ('.yaml', '.yml') and path.exists():
+            return path
+            
+        # Default to prompts directory
+        return self.prompts_dir / f"{prompt_id}.yaml"
+
     def load(self, prompt_id: str) -> Dict:
         """
         Load a prompt YAML file.
         
         Args:
-            prompt_id: The prompt ID (filename without .yaml)
+            prompt_id: The prompt ID (filename without .yaml) or a file path
             
         Returns:
             Dictionary containing the prompt data
@@ -34,7 +45,7 @@ class YAMLLoader:
             FileNotFoundError: If the prompt file doesn't exist
             yaml.YAMLError: If the YAML is invalid
         """
-        path = self.prompts_dir / f"{prompt_id}.yaml"
+        path = self._resolve_path(prompt_id)
         
         if not path.exists():
             raise FileNotFoundError(f"Prompt file not found: {path}")
@@ -90,13 +101,12 @@ class YAMLLoader:
         Check if a prompt file exists.
         
         Args:
-            prompt_id: The prompt ID
+            prompt_id: The prompt ID or file path
             
         Returns:
             True if the file exists, False otherwise
         """
-        path = self.prompts_dir / f"{prompt_id}.yaml"
-        return path.exists()
+        return self._resolve_path(prompt_id).exists()
     
     def list_prompts(self) -> list[str]:
         """

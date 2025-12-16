@@ -16,7 +16,7 @@ class PromptHasher:
         """
         Generate a SHA256 hash of the prompt content.
         
-        Only hashes the content that matters (id, model, template, system).
+        Only hashes the content that matters (id, parameters, template, system).
         Version and metadata are excluded to allow tracking content changes.
         
         Args:
@@ -28,7 +28,7 @@ class PromptHasher:
         # Only hash the content that matters
         content = {
             'id': prompt.id,
-            'model': prompt.model,
+            'parameters': prompt.parameters,
             'template': prompt.template,
         }
         
@@ -56,10 +56,15 @@ class PromptHasher:
         Returns:
             First 12 characters of the SHA256 hash
         """
+        # Handle parameters extraction
+        parameters = data.get('parameters', {})
+        if 'model' in data and 'model' not in parameters:
+             parameters['model'] = data['model']
+
         # Extract only the content that matters
         content = {
             'id': data.get('id'),
-            'model': data.get('model'),
+            'parameters': parameters,
             'template': data.get('template'),
         }
         

@@ -8,6 +8,9 @@ import grompt
 # Load by ID (defaults to reading from 'prompts' directory)
 prompt = grompt.load("code-review")
 
+# Load by absolute file path
+prompt = grompt.load("/path/to/my-prompt.yaml")
+
 # Load from a specific directory or use a specific loader
 prompt = grompt.load("code-review", prompts_dir="my_prompts", loader="yaml")
 

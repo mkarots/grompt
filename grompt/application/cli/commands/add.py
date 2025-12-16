@@ -70,6 +70,11 @@ def add(name: str, model: str, template: str, description: str, system: str, dir
     # Use provided model or default from config
     prompt_model = model or config.get('default_model', 'gpt-4')
     
+    # Create parameters dict
+    parameters = {
+        "model": prompt_model
+    }
+    
     # Create prompt with provided options or defaults
     if template:
         # User provided template
@@ -85,8 +90,8 @@ def add(name: str, model: str, template: str, description: str, system: str, dir
     prompt = Prompt(
         id=prompt_id,
         version=1,
-        model=prompt_model,
         template=prompt_template,
+        parameters=parameters,
         system=system,
         description=description,
     )
