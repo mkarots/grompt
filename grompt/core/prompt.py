@@ -39,7 +39,7 @@ class Prompt:
     def model(self) -> Optional[str]:
         """Backward compatibility helper to get model from parameters."""
         return self.parameters.get("model")
-
+    
     def to_dict(self) -> Dict[str, Any]:
         """Convert prompt to dictionary for serialization."""
         data = {
