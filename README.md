@@ -1,8 +1,9 @@
 # Grompt - Git for Prompts
 
 [![PyPI version](https://img.shields.io/pypi/v/grompt.svg)](https://pypi.org/project/grompt/)
-[![License](https://img.shields.io/pypi/l/grompt.svg)](https://github.com/yourusername/grompt/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-passing-green)](https://github.com/yourusername/grompt/actions)
+[![Coverage](https://codecov.io/gh/yourusername/grompt/branch/main/graph/badge.svg)](https://codecov.io/gh/yourusername/grompt)
 [![Python Versions](https://img.shields.io/pypi/pyversions/grompt.svg)](https://pypi.org/project/grompt/)
 
 **Version, test, and manage LLM prompts separately from code.**
