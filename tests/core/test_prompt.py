@@ -6,16 +6,14 @@ import pytest
 from grompt.core.prompt import Prompt
 from jinja2 import TemplateError
 
+
 class TestPrompt:
     """Test cases for the Prompt class."""
 
     def test_init_happy_path(self):
         """Test successful initialization with required fields."""
         prompt = Prompt(
-            id="test-prompt",
-            version=1,
-            template="Hello {{ name }}!",
-            parameters={"model": "gpt-4"}
+            id="test-prompt", version=1, template="Hello {{ name }}!", parameters={"model": "gpt-4"}
         )
         assert prompt.id == "test-prompt"
         assert prompt.version == 1
@@ -36,7 +34,7 @@ class TestPrompt:
             system="You are a helper.",
             description="A complex prompt",
             variables={"result": {"type": "string"}},
-            metadata={"custom_tag": "beta"}
+            metadata={"custom_tag": "beta"},
         )
         assert prompt.hash == "abc123hash"
         assert prompt.system == "You are a helper."
@@ -59,7 +57,7 @@ class TestPrompt:
         """Test validation fails with empty template."""
         with pytest.raises(ValueError, match="Prompt template cannot be empty"):
             Prompt(id="test", version=1, template="")
-            
+
     def test_parameters_default(self):
         """Test parameters defaults to empty dict."""
         prompt = Prompt(id="test", version=1, template="t")
@@ -73,10 +71,10 @@ class TestPrompt:
             template="Template",
             parameters={"model": "gpt-4"},
             system="System",
-            metadata={"extra": "value"}
+            metadata={"extra": "value"},
         )
         data = prompt.to_dict()
-        
+
         assert data["id"] == "serialize-me"
         assert data["version"] == 1
         assert data["parameters"]["model"] == "gpt-4"
@@ -90,11 +88,11 @@ class TestPrompt:
         data = {
             "id": "deserialize-me",
             "parameters": {"model": "gpt-4"},
-            "template": "Template Content"
+            "template": "Template Content",
         }
         # version defaults to 1
         prompt = Prompt.from_dict(data)
-        
+
         assert prompt.id == "deserialize-me"
         assert prompt.version == 1
         assert prompt.model == "gpt-4"
@@ -102,11 +100,7 @@ class TestPrompt:
 
     def test_from_dict_legacy_model(self):
         """Test deserialization from legacy dict with top-level model field."""
-        data = {
-            "id": "legacy",
-            "model": "gpt-3.5",
-            "template": "Old"
-        }
+        data = {"id": "legacy", "model": "gpt-3.5", "template": "Old"}
         prompt = Prompt.from_dict(data)
         assert prompt.model == "gpt-3.5"
         assert prompt.parameters["model"] == "gpt-3.5"
@@ -119,10 +113,10 @@ class TestPrompt:
             "parameters": {"model": "claude-2"},
             "template": "Hi",
             "extra_field_1": "value1",
-            "extra_field_2": 123
+            "extra_field_2": 123,
         }
         prompt = Prompt.from_dict(data)
-        
+
         assert prompt.id == "meta-prompt"
         assert prompt.metadata["extra_field_1"] == "value1"
         assert prompt.metadata["extra_field_2"] == 123
@@ -131,20 +125,12 @@ class TestPrompt:
 
     def test_render_delegation(self):
         """Test that render method correctly delegates to TemplateRenderer."""
-        prompt = Prompt(
-            id="render-test",
-            version=1,
-            template="Hello {{ name }}!"
-        )
+        prompt = Prompt(id="render-test", version=1, template="Hello {{ name }}!")
         result = prompt.render(name="World")
         assert result == "Hello World!"
 
     def test_render_error(self):
         """Test that render raises TemplateError on bad template logic."""
-        prompt = Prompt(
-            id="bad-render",
-            version=1,
-            template="{% if missing_end %}"
-        )
+        prompt = Prompt(id="bad-render", version=1, template="{% if missing_end %}")
         with pytest.raises(TemplateError):
             prompt.render()

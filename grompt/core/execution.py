@@ -8,12 +8,12 @@ from grompt.core.prompt import Prompt
 
 class PromptExecutor(Protocol):
     """Interface for executing prompts."""
-    
+
     def execute(self, prompt: Prompt, inputs: Dict[str, Any]) -> str:
         """
         Execute the prompt with the given inputs.
-        
-        The executor should look at prompt.parameters to decide 
+
+        The executor should look at prompt.parameters to decide
         how to run (e.g. which model, temperature).
         """
         ...
@@ -33,4 +33,3 @@ def get_executor(name: str) -> PromptExecutor:
     if name not in _executors:
         raise ValueError(f"No executor registered for '{name}'")
     return _executors[name]
-
