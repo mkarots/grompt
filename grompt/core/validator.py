@@ -3,7 +3,7 @@ Prompt validation logic.
 """
 
 from typing import Dict, Any, List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from grompt.core.prompt import Prompt
 from grompt.core.template import TemplateRenderer
 
@@ -13,14 +13,8 @@ class ValidationResult:
     """Result of prompt validation."""
 
     valid: bool
-    errors: List[str] = None
-    warnings: List[str] = None
-
-    def __post_init__(self):
-        if self.errors is None:
-            self.errors = []
-        if self.warnings is None:
-            self.warnings = []
+    errors: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
 
     @property
     def passed(self) -> bool:
