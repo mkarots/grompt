@@ -10,9 +10,10 @@ from typing import Union
 from grompt.core.prompt import Prompt
 from grompt.core.template import TemplateRenderer
 from grompt.infrastructure.storage.yaml_loader import YAMLLoader
+from grompt.utils import load_variables
 
 __version__ = "0.1.0"
-__all__ = ["Prompt", "TemplateRenderer", "load"]
+__all__ = ["Prompt", "TemplateRenderer", "load", "load_variables"]
 
 
 def load(prompt_id: Union[str, Path], loader: str = "yaml", prompts_dir: Union[str, Path] = "prompts") -> Prompt:

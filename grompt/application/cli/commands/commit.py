@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Optional
 from grompt.infrastructure.storage.yaml_loader import YAMLLoader
 from grompt.infrastructure.storage.hasher import PromptHasher
+from grompt.core.validator import PromptValidator
 
 
 def load_config() -> dict[str, Any]:
@@ -26,9 +27,10 @@ def load_config() -> dict[str, Any]:
 @click.command()
 @click.argument('name')
 @click.argument('message', required=False)
-def commit(name: str, message: Optional[str]) -> None:
+@click.option('--force', is_flag=True, help='Force version increment even if content unchanged')
+def commit(name: str, message: Optional[str], force: bool = False) -> None:
     """
-    Commit changes to a prompt (increment version and generate hash).
+    Commit changes to a prompt (increment version only if content changed).
     
     Examples:
     
@@ -37,6 +39,9 @@ def commit(name: str, message: Optional[str]) -> None:
         
         # Commit with message
         grompt commit my-prompt "Optimized for fewer tokens"
+        
+        # Force version increment even if unchanged
+        grompt commit my-prompt --force
     """
     try:
         config = load_config()
@@ -62,15 +67,38 @@ def commit(name: str, message: Optional[str]) -> None:
         # Load current prompt
         prompt = loader.load_prompt(prompt_id)
         
-        # Store old version
+        # Validate prompt before committing
+        validation_result = PromptValidator.validate(prompt)
+        if not validation_result.passed:
+            click.echo(click.style('Validation failed:', fg='red'))
+            for error in validation_result.errors:
+                click.echo(f'  ✗ {error}')
+            if validation_result.warnings:
+                for warning in validation_result.warnings:
+                    click.echo(click.style(f'  ⚠ {warning}', fg='yellow'))
+            click.echo('\nFix errors before committing.')
+            return
+        
+        # Show warnings if any
+        if validation_result.warnings:
+            for warning in validation_result.warnings:
+                click.echo(click.style(f'⚠ {warning}', fg='yellow'))
+        
+        # Store old version and hash
         old_version = prompt.version
         old_hash = prompt.hash
         
-        # Increment version
-        prompt.version += 1
-        
-        # Generate new hash
+        # Generate new hash from current content
         new_hash = PromptHasher.generate_hash(prompt)
+        
+        # Check if content actually changed
+        if old_hash and new_hash == old_hash and not force:
+            click.echo(click.style('No changes detected. Version not incremented.', fg='yellow'))
+            click.echo('Use --force to increment version anyway.')
+            return
+        
+        # Content changed (or force flag) - increment version
+        prompt.version += 1
         prompt.hash = new_hash
         
         # Save updated prompt
@@ -87,9 +115,6 @@ def commit(name: str, message: Optional[str]) -> None:
         
         if message:
             click.echo(f'  message: {message}')
-        
-        # TODO: Optionally save to history file
-        # This could be implemented later to track all commits
         
     except Exception as e:
         click.echo(click.style(f'Error: {e}', fg='red'))

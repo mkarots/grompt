@@ -1,23 +1,5 @@
 # Using Prompts with Variables
 
-## CLI Testing
-
-```bash
-# Single variable
-grompt test summarize --var text="Long article here..."
-
-# Multiple variables
-grompt test translate \
-  --var target_language="Spanish" \
-  --var text="Hello, world!"
-
-# Variables from file
-grompt test code-review --var code="$(cat myfile.py)"
-
-# Complex variables (JSON)
-grompt test advanced --var items='[{"name":"x","value":1}]'
-```
-
 ## Python API
 
 ```python
@@ -38,12 +20,41 @@ rendered = prompt.render(
     focus_areas=["quality", "type hints"]
 )
 
+# Load variables from YAML file (optional helper)
+variables = grompt.load_variables("inputs/simple.yaml")
+rendered = prompt.render(**variables)
+
+# Or load from any file path
+variables = grompt.load_variables("test-inputs/code-review.example1.yaml")
+rendered = prompt.render(**variables)
+
 # With system message
 if prompt.system:
     system_msg = prompt.system
     user_msg = rendered
     # Use both with your LLM API
 ```
+
+## Loading Variables from Files
+
+The `load_variables()` helper lets you organize test inputs however you want:
+
+```python
+import grompt
+
+# Load prompt
+prompt = grompt.load("code-review")
+
+# Load variables from any YAML file
+variables = grompt.load_variables("prompts/test-inputs/code-review.simple.yaml")
+rendered = prompt.render(**variables)
+
+# Or use your own structure
+variables = grompt.load_variables("data/inputs/example1.yaml")
+rendered = prompt.render(**variables)
+```
+
+**No enforced structure** - organize files however makes sense for your project.
 
 ## Using with LLM APIs
 

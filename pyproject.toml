@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "Grompt Contributors"}
+    {name = "Michael Karotsieris", email = "mkarots@users.noreply.github.com"}
 ]
 keywords = ["llm", "prompts", "version-control", "ai", "gpt"]
 classifiers = [
@@ -47,10 +47,10 @@ tokenizer = [
 grompt = "grompt.application.cli.main:cli"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/grompt"
-Documentation = "https://github.com/yourusername/grompt#readme"
-Repository = "https://github.com/yourusername/grompt"
-Issues = "https://github.com/yourusername/grompt/issues"
+Homepage = "https://github.com/mkarots/grompt"
+Documentation = "https://github.com/mkarots/grompt#readme"
+Repository = "https://github.com/mkarots/grompt"
+Issues = "https://github.com/mkarots/grompt/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
