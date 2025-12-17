@@ -1,0 +1,35 @@
+# Code owners for Grompt
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global owner - all files default to this owner
+* @mkarots
+
+# Core domain logic - requires review
+/grompt/core/ @mkarots
+
+# Infrastructure layer - requires review
+/grompt/infrastructure/ @mkarots
+
+# Application layer (CLI) - requires review
+/grompt/application/ @mkarots
+
+# Public API - requires review
+/grompt/__init__.py @mkarots
+/grompt/utils.py @mkarots
+
+# Tests - requires review
+/tests/ @mkarots
+
+# Configuration files - requires review
+/pyproject.toml @mkarots
+/Makefile @mkarots
+
+# GitHub workflows - requires review
+/.github/workflows/ @mkarots
+
+# Documentation - requires review
+/README.md @mkarots
+/docs/ @mkarots
+/CODING_GUIDELINES.md @mkarots
+/CONTRIBUTING.md @mkarots
+
