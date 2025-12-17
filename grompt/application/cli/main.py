@@ -11,10 +11,11 @@ from grompt.application.cli.commands import init, add, commit
 def cli() -> None:
     """
     Grompt - Git for Prompts
-    
+
     Manage LLM prompts with version control.
     """
     pass
+
 
 # Register commands
 cli.add_command(init.init)

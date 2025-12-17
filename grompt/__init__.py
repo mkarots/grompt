@@ -16,15 +16,17 @@ __version__ = "0.1.0"
 __all__ = ["Prompt", "TemplateRenderer", "load", "load_variables"]
 
 
-def load(prompt_id: Union[str, Path], loader: str = "yaml", prompts_dir: Union[str, Path] = "prompts") -> Prompt:
+def load(
+    prompt_id: Union[str, Path], loader: str = "yaml", prompts_dir: Union[str, Path] = "prompts"
+) -> Prompt:
     """
     Load a prompt by ID or file path.
-    
+
     Args:
         prompt_id: The ID of the prompt or path to the prompt file
         loader: The loader type to use (default: "yaml")
         prompts_dir: Directory containing prompts (default: "prompts")
-        
+
     Returns:
         The loaded Prompt object
     """

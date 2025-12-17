@@ -59,4 +59,3 @@ class TestTemplateRenderer:
         """Test validation returns False for invalid templates."""
         assert TemplateRenderer.validate("{% if unclosed %}") is False
         assert TemplateRenderer.validate("{{ unclosed_variable") is False
-
