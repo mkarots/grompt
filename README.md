@@ -20,7 +20,6 @@ That's it. Everything else is optional.
 - ✅ Version changes with `grompt commit code-review`
 - ✅ Use in code: `prompt = grompt.load("code-review")`
 
-**That's the core.** Everything else is nice-to-have.
 
 ---
 
