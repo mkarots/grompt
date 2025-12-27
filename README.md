@@ -3,7 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/grompt.svg)](https://pypi.org/project/grompt/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-passing-green)](https://github.com/mkarots/grompt/actions)
-[![codecov](https://codecov.io/gh/mkarots/grompt/graph/badge.svg?token=R8DBWO2KNF)](https://codecov.io/gh/mkarots/grompt)
+[![Coverage](https://codecov.io/gh/mkarots/grompt/branch/main/graph/badge.svg)](https://codecov.io/gh/mkarots/grompt)
 [![Python Versions](https://img.shields.io/pypi/pyversions/grompt.svg)](https://pypi.org/project/grompt/)
 
 **Store prompts as YAML files, version them, and use them in code by ID.**
